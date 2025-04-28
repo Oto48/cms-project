@@ -1,3 +1,9 @@
+<?php
+
+include __DIR__ . '/../../init.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
