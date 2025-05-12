@@ -2,6 +2,14 @@
 <?php include 'partials/navbar.php';?>
 <?php include 'partials/hero.php';?>
 
+<?php 
+
+$db = new Database();
+
+$db->getConnection();
+
+?>
+
 <main class="container my-5">
     <div class="row mb-4">
         <div class="col-md-4">
