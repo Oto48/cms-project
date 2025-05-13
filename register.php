@@ -5,7 +5,16 @@ include 'partials/navbar.php';
 include 'partials/hero.php';
 
 if(isPostRequest()) {
-    echo getPostData('username');
+    $username = getPostData('username');
+    $email = getPostData('email');
+    $password = getPostData('password');
+
+    $user = new User();
+    if($user->register($username, $email, $password)) {
+        redirect('login.php');
+    } else {
+        echo 'Registration Failed';
+    }
 }
 
 ?>
@@ -31,6 +40,7 @@ if(isPostRequest()) {
                         type="email"
                         class="form-control"
                         id="email"
+                        name="email"
                         required
                     >
                 </div>
@@ -40,6 +50,7 @@ if(isPostRequest()) {
                         type="password"
                         class="form-control"
                         id="password"
+                        name="password"
                         required
                     >
                 </div>
@@ -49,6 +60,7 @@ if(isPostRequest()) {
                         type="password"
                         class="form-control"
                         id="confirm-password"
+                        name="confirm-password"
                         required
                     >
                 </div>
