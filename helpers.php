@@ -29,4 +29,13 @@ function redirect($url){
     exit;
 }
 
+function isPostRequest() {
+    return $_SERVER['REQUEST_METHOD'] == 'POST';
+}
+
+function getPostData($input) {
+    $data = isset($_POST[$input]) ? trim($_POST[$input]) : null;
+    return $data;
+}
+
 ?>

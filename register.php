@@ -1,18 +1,27 @@
-<?php include 'partials/header.php';?>
-<?php include 'partials/navbar.php';?>
-<?php include 'partials/hero.php';?>
+<?php
+
+include 'partials/header.php';
+include 'partials/navbar.php';
+include 'partials/hero.php';
+
+if(isPostRequest()) {
+    echo getPostData('username');
+}
+
+?>
 
 <main class="container my-5">
     <h2 class="text-center mb-4">Register</h2>
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form action="welcome.html" method="post">
+            <form method="post">
                 <div class="mb-3">
-                    <label for="name" class="form-label">Full Name *</label>
+                    <label for="username" class="form-label">Full Name *</label>
                     <input
                         type="text"
                         class="form-control"
-                        id="name"
+                        id="username"
+                        name="username"
                         required
                     >
                 </div>
