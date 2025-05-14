@@ -1,69 +1,43 @@
-<?php include 'partials/header.php';?>
-<?php include 'partials/navbar.php';?>
-<?php include 'partials/hero.php';?>
-
 <?php 
 
-$db = new Database();
+require_once 'partials/header.php';
+include base_path('partials/navbar.php');
+include base_path('partials/hero.php');
 
-$db->getConnection();
+$article = new Article();
+
+$articles = $article->get_all();
 
 ?>
 
 <main class="container my-5">
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <img
-                src="https://via.placeholder.com/350x200"
-                class="img-fluid"
-                alt="Blog Post Image"
-            >
-        </div>
-        <div class="col-md-8">
-            <h2>Blog Post Title 1</h2>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nisl eros, 
-                pulvinar facilisis justo mollis, auctor consequat urna.
-            </p>
-            <a href="article.html" class="btn btn-primary">Read More</a>
-        </div>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <img
-                src="https://via.placeholder.com/350x200"
-                class="img-fluid"
-                alt="Blog Post Image"
-            >
-        </div>
-        <div class="col-md-8">
-            <h2>Blog Post Title 2</h2>
-            <p>
-                Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, 
-                pharetra a, ultricies in, diam. Sed arcu.
-            </p>
-            <a href="#" class="btn btn-primary">Read More</a>
-        </div>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <img
-                src="https://via.placeholder.com/350x200"
-                class="img-fluid"
-                alt="Blog Post Image"
-            >
-        </div>
-        <div class="col-md-8">
-            <h2>Blog Post Title 3</h2>
-            <p>
-                Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu 
-                vulputate magna eros eu erat.
-            </p>
-            <a href="#" class="btn btn-primary">Read More</a>
-        </div>
-    </div>
+    <?php if(!empty($articles)) : ?>
+        <?php foreach($articles as $articleItem):?>
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <?php if(!empty($articleItem->image)): ?>
+                        <a href="<?= base_url("article.php?id=$articleItem->id") ?>"><img
+                                src="<?= htmlspecialchars($articleItem->image) ?>"
+                                class="img-fluid"
+                                alt="Blog Post Image"
+                                style="width: 350px;height: 200px"
+                        ></a>
+                    <?php else: ?>
+                        <a href="<?= base_url("article.php?id=$articleItem->id") ?>"> <img
+                            src="https://placehold.co/350x200"
+                            class="img-fluid"
+                            alt="Blog Post Image"
+                        ></a>
+                    <?php endif; ?>
+                </div>
+                <div class="col-md-8">
+                    <h2><?= htmlspecialchars($articleItem->title) ?></h2>
+                    <p><?= htmlspecialchars($article->getExcerpt($articleItem->content, 70)) ?></p>
+                    <a href="article.php" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+        <?php endforeach;?>
+    <?php endif; ?>
 </main>
 
 <?php include 'partials/footer.php';?>

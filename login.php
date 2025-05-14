@@ -1,18 +1,35 @@
-<?php include 'partials/header.php';?>
-<?php include 'partials/navbar.php';?>
-<?php include 'partials/hero.php';?>
+<?php
+
+include 'partials/header.php';
+include 'partials/navbar.php';
+include 'partials/hero.php';
+
+if(isPostRequest()) {
+    $email = getPostData('email');
+    $password = getPostData('password');
+    $user = new User();
+    
+    if($user->login($email, $password)) {
+        redirect('admin.php');
+    } else {
+        echo 'Login Failed';
+    }
+}
+
+?>
 
 <main class="container my-5">
     <h2 class="text-center mb-4">Login</h2>
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form action="dashboard.html" method="post">
+            <form method="post">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email address *</label>
                     <input
                         type="email"
                         class="form-control"
                         id="email"
+                        name="email"
                         required
                     >
                 </div>
@@ -22,6 +39,7 @@
                         type="password"
                         class="form-control"
                         id="password"
+                        name="password"
                         required
                     >
                 </div>
