@@ -33,7 +33,7 @@ $articles = $article->get_all();
                 <div class="col-md-8">
                     <h2><?= htmlspecialchars($articleItem->title) ?></h2>
                     <p><?= htmlspecialchars($article->getExcerpt($articleItem->content, 70)) ?></p>
-                    <a href="article.php" class="btn btn-primary">Read More</a>
+                    <a href="article.php?id=<?= $articleItem->id ?>" class="btn btn-primary">Read More</a>
                 </div>
             </div>
         <?php endforeach;?>
