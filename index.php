@@ -5,7 +5,6 @@ include base_path('partials/navbar.php');
 include base_path('partials/hero.php');
 
 $article = new Article();
-
 $articles = $article->get_all();
 
 ?>

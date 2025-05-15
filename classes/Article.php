@@ -53,9 +53,42 @@ class Article {
         }
     }
 
-    public function formatCreatedAt($date) {
-        return date('F j, Y', strtotime($date));
+    public function getArticleByUser($id) {
+        $stmt = $this->conn->prepare("SELECT * FROM " . $this->table ." WHERE user_id = :id LIMIT 1");
+
+        $stmt->bindParam(":id",$id);
+        $stmt->execute();
+
+        $articles = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+        if($articles) {
+            return $articles;
+        } else {
+            return false;
+        }
     }
+
+    public function createArticle($title, $content, $author_id, $created_at, $image) {
+        $query = "INSERT INTO {$this->table} (title, content, user_id, created_at, image)
+                VALUES (:title, :content, :user_id, :created_at, :image)";
+
+        $stmt = $this->conn->prepare($query);
+
+        $params = [
+            ':title' => $title,
+            ':content' => $content,
+            ':user_id' => $author_id,
+            ':created_at' => $created_at,
+            ':image' => $image
+        ];
+
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+
+        return $stmt->execute();
+    }
+
 }
 
 ?>
