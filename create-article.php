@@ -4,12 +4,13 @@ include "partials/admin/navbar.php";
 
 
 if(isPostRequest()){
+    $article = new Article();
+
     $title = $_POST['title'];
     $content = $_POST['content'];
     $author_id = $_SESSION['user_id'];
     $created_at = $_POST['date'];
-
-    $article = new Article();
+    $imagePath = $article->uploadImage($_FILES['featured_image']);
 
     if($article->createArticle($title, $content, $author_id, $created_at, $imagePath)){
         redirect("admin.php");
@@ -23,7 +24,7 @@ if(isPostRequest()){
 
 <main class="container my-5">
     <h2>Create New Article</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="title" class="form-label">Article Title *</label>
             <input name="title" type="text" class="form-control" id="title" placeholder="Enter article title" required>
