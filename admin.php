@@ -4,7 +4,7 @@
 
     $article = new Article();
     $userId = $_SESSION['user_id'];
-    $userArticles = $article->getArticleByUser($userId);
+    $userArticles = $article->getArticlesByUser($userId);
 ?>
 
 <main class="container my-5">
@@ -41,7 +41,7 @@
                         </td>
 
                         <td>
-                            <form onsubmit="confirmDelete(<?= $articleItem->id ?>)" method="POST" action="<?= base_url("delete_article.php") ?>">
+                            <form method="POST" action="<?= base_url("delete_article.php") ?>">
                                 <input name="id" value="<?= $articleItem->id ?>" type="hidden">
                                 <button class="btn btn-sm btn-danger">Delete</button>
                             </form>
