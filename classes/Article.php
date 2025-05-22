@@ -100,26 +100,28 @@ class Article {
     }
 
     public function uploadImage($featuredImage) {
+        if (empty($featuredImage["tmp_name"]) || $featuredImage["error"] !== UPLOAD_ERR_OK) {
+            return null;
+        }
+
         $target_dir = "uploads/";
         $target_file = $target_dir . basename($featuredImage["name"]);
-        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-        // Check if image file is a actual image or fake image
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
         $check = getimagesize($featuredImage["tmp_name"]);
         if($check !== false) {
-            echo "File is an image - " . $check["mime"] . ".";
-            $target_dir = 'uploads/';
-            $uniquesavename=time().uniqid(rand());
-            $imagePath = $target_file . '_' . $uniquesavename . '.jpg';
-            $filename = $featuredImage["tmp_name"];
-            move_uploaded_file($filename, $imagePath);
+            $uniquesavename = time() . uniqid(rand(), true);
+            $imagePath = $target_dir . $uniquesavename . '.' . $imageFileType;
+
+            move_uploaded_file($featuredImage["tmp_name"], $imagePath);
             return $imagePath;
         } else {
             echo "File is not an image.";
+            return null;
         }
     }
 
-    public function deleteWithImage($id)
-    {
+    public function deleteWithImage($id) {
 
         $article =  $this->getArticleById($id);
 
@@ -142,6 +144,30 @@ class Article {
 
         }
         return false;
+    }
+
+    public function update($id, $title, $content, $author_id, $created_at, $imagePath = null) {
+
+        $query = "UPDATE " . $this->table . " SET title = :title, content = :content, user_id = :user_id, created_at = :created_at";
+
+        if($imagePath){
+            $query .= ", image = :image";
+        }
+
+        $query .= " WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':content', $content);
+        $stmt->bindParam(':user_id', $author_id);
+        $stmt->bindParam(':created_at', $created_at);
+
+        if($imagePath){
+            $stmt->bindParam(':image', $imagePath, PDO::PARAM_STR);
+        }
+        return $stmt->execute();
     }
 
 }
